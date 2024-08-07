@@ -1,29 +1,18 @@
 #include <ncurses.h>
+#include "grid.h"
 
-int main () {
+int main() {
 
-    initscr();
+    initscr();              // Inizializza ncurses
+    noecho();               // Non mostrare l'input dell'utente
+    cbreak();               // Disabilita il buffering dell'input
 
-    // hide the cursor
-    curs_set(0);
+    Grid grid;
+    grid.draw_grid();
 
-    int height, width, start_y, start_x;
-    height = 20;
-    width = 10;
-    start_y = 5;
-    start_x = 10;
+    refresh();              // Aggiorna lo schermo
+    getch();                // Aspetta l'input dell'utente
 
-    WINDOW *win = newwin(height, width, start_y, start_x);
-
-    // cornice base
-    box(win, 0, 0);
-
-    // refreshes a specific window
-    wrefresh(win);
-    // refreshes the entire screen
-    refresh();
-
-    endwin();
-
+    endwin();               // Termina ncurses
     return 0;
 }
