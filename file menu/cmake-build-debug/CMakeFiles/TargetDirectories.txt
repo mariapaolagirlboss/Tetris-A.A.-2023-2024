@@ -1,0 +1,3 @@
+/Users/gretalachina/CLionProjects/untitled16/cmake-build-debug/CMakeFiles/untitled16.dir
+/Users/gretalachina/CLionProjects/untitled16/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/gretalachina/CLionProjects/untitled16/cmake-build-debug/CMakeFiles/rebuild_cache.dir
