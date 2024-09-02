@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include "grid.h"
+using namespace std;
 
 int main() {
 
