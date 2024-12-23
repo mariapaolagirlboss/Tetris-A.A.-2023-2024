@@ -53,7 +53,7 @@ void Classifica::caricaPunteggi() {
 void Classifica::salvaPunteggi() const {
     std::ofstream file(nomeFile);
     if (file.is_open()) {
-        for (int punteggio : punteggi) {
+        for (int punteggio : punteggi) { 
             file << punteggio << std::endl;
         }
         file.close();
