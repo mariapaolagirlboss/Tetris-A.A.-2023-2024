@@ -1,17 +1,20 @@
 #include "Tetramini.hpp"
 
-Tetramini::Tetramini(Forma f[]) {
-    for(int i = 0; i < 2; i++) { 
-        forme[i] = f[i];
+Tetramini::Tetramini(int tipo_forma){
+    if(tipo_forma == QUADRATO || tipo_forma == RETTANGOLO){
+        forma = tipo_forma;
+    }else{
+        forma = QUADRATO;
     }
     x = 0;
     y = 0;
     generaMatrice();
 }
 
-const char* const* Tetramini::getMatrice() const {
-    return reinterpret_cast<const char* const*>(matrice);
-} //che cosa fa questo codice? è importante?
+const char (&Tetramini::getMatrice() const)[4][4]{
+    return matrice;
+}
+
 
 void Tetramini::ruota_senso_orario(){
     char tmp[4][4];
@@ -68,14 +71,12 @@ void Tetramini::generaMatrice(){
         }
     }
 
-    Forma forma = forme[0];
-
-    if(forma.quadrato == 1){
+    if(forma == QUADRATO){ 
         matrice[1][1] = '#';
         matrice[1][2] = '#';
         matrice[2][1] = '#';
         matrice[2][2] = '#';
-    }else if(forma.rettangolo == 1){
+    }else if(forma == RETTANGOLO){ 
         matrice[1][0] = '#';
         matrice[1][1] = '#';
         matrice[1][2] = '#';
