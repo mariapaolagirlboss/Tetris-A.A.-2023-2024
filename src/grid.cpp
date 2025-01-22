@@ -49,7 +49,7 @@ bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int la
                 int nuovaY = y + i_r; // calcolo nuova posizione in base ai dati forniti
 
 
-                if (nuovaX<0 || nuovaX > Larghezza || nuovaY<0 || nuovaY>Lunghezza){
+                if (nuovaX<0 || nuovaX >= Larghezza || nuovaY<0 || nuovaY>=Lunghezza){
                     return false; //collisione con i bordi
                 }
 
@@ -90,7 +90,7 @@ void Griglia::Controllo_Er(){
                 break;
             }
         }
-        if (complete);{
+        if (complete) {
             Elimina_Riga(i);
             i--; //devo aggiornare indice, rige sopra spostate verso il basso (RICONTROLLA)
         }
@@ -123,7 +123,12 @@ void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, in
     for (int index = 0; index<lunghezza; index++){
         for (int index_s = 0; index_s<larghezza; index_s++){// stesso procedimento di prima
              if(tetramino[index][index_s]!= ' '){
-                grid[y+index][x+index_s]=' ';
+                int posizione_x= x + index_s;
+                int posizione_y= y + index;
+
+                if (posizione_x >=0 && posizione_x < Larghezza && posizione_y>=0 && posizione_y < Lunghezza) {
+                    grid[posizione_x][posizione_y] = ' '; // solo se valido svuoto cella, potrebbe andare in segmentation fault
+                }
              }
           
         }
@@ -131,4 +136,4 @@ void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, in
 
 } 
 // Quando usare questa funzione? Quando si deve spostare un determinato tetramino e si deve svuotare il tutto,
-// oppure quando il calcolo delle possibile mosse (...???) RIGUARDA
+// oppure quando il calcolo delle possibile mosse (...???) RIGUARDA, UTILE PER AGGIORNARE POSIZIONE DI UN PEZZO IN MOVIMENTO
