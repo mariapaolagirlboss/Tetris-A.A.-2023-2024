@@ -31,7 +31,11 @@ void Griglia::Stampa(){
 }
 
 bool Griglia::Verifica_Posizione(int x, int y){
-    return (x>=0 && x<Larghezza && y>=0 && y<Lunghezza&&grid[x][y]==' '); 
+     if (x>=0 && x<Larghezza && y>=0 && y<Lunghezza&&grid[x][y]==' ') {
+        return true;
+     } else {
+        return false;
+     }
 
 }
 
