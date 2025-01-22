@@ -67,7 +67,7 @@ bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int la
 // Sottostante: operazione di eliminare una riga completa, guarda se fa parte collisioni o salvataggio (??buhhh)
 
 void Griglia::Elimina_Riga(int r){
-    for (int i = r; i>0; i++){
+    for (int i = r; i>0; i--){ // riguardare loop, ma credo sia giusto
         for (int index = 0; index<Larghezza; index++){
             grid [i][index]=grid[i-1][index]; //copia riga sopra nella riga corrente, poichè riga corrente è stata eliminata
 
