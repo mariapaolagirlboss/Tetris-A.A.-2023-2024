@@ -1,31 +1,54 @@
-#ifndef CLASSIFICA_HPP
-#define CLASSIFICA_HPP
+#include <fstream>
+#include <ncurses.h>
+
+#include "./my_list.hpp"
+
+#define MENU_SIZE_Y n_punteggi + 2
+#define MENU_SIZE_X 20
 
 
-#include <vector>
-#include <string>
 
-class Classifica {
-private:
-    std::vector<int> punteggi;  // Vettore che contiene i punteggi
-    std::string nomeFile;       // Nome del file dove i punteggi sono salvati
+class classifica {
+    protected:
 
-public:
-    // Costruttore: inizializza la classifica e carica i punteggi dal file
-    Classifica(const std::string& file);
+        // attributi privati
+        list punteggi;              // lista bidirezionale dei punteggi
+        unsigned int n_punteggi;    // lunghezza della lista punteggi
+        char* filename;             // nome del file su cui salvare la classifica
 
-    // Aggiunge un nuovo punteggio e lo salva nel file
-    void aggiungiPunteggio(int punteggio);
+        // funzione usata per stampare il menu in caso di scorrimento della lista della classifica
+        void print_menu(WINDOW *win, int start_line, list to_draw, int index);
 
-    // Mostra la classifica ordinata in modo decrescente
-    void mostraClassifica() const;
+        // funzione usata per disegnare l'intestazione della pagina della classifica
+        void drawHeader(WINDOW *win);
 
-private:
-    // Carica i punteggi dal file
-    void caricaPunteggi();
+    public:
+        //Costruttore
+        classifica(){};
+        classifica(char* fileName);
 
-    // Salva i punteggi nel file
-    void salvaPunteggi() const;
+        //distruttore
+        ~classifica();
+
+        //funzione che disegna la classifica a video
+        void drawClassifica(WINDOW *win);
+
+        // getter della lista punteggi
+        list getPunteggi();
+
+        // funzione che dealloca interamente la lista (viene richiamata prima della chiusura del gioco)
+        void distruggiPunteggi();
+
+        // apre in scrittura il file dei punteggi e salva tutti i file in ordine crescente 
+        void salvaPunteggi();
+
+        // inserisce in maniera ordinata decrescente un punteggio nella lista dei punteggi
+        void inserisciPunteggio(int p);
+
+        // getter del numero dei punteggi
+        unsigned int getn_Punteggi();
+
+        // getter del filename 
+        char *getFilename();
+
 };
-
-#endif // CLASSIFICA_HPP

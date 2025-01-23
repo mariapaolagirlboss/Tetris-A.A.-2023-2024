@@ -1,61 +1,133 @@
-//
-// Created by Greta La China on 25/08/24.
-//
-#include "Classifica.hpp"
-#include <fstream>
-#include <algorithm>
-#include <ncurses.h>
+#include "../include/classifica.hpp"
+#define HEADER_SIZE_X 25
 
-// Costruttore: inizializza la classifica e carica i punteggi dal file
-Classifica::Classifica(const std::string& file) : nomeFile(file) {
-    caricaPunteggi();
-}
+//  costruttore
+classifica::classifica(char *fileName)
+{
+    //  inizializzo attributi
+    this->punteggi = new node;
+    this->n_punteggi = 0;
 
-// Aggiunge un nuovo punteggio e lo salva nel file
-void Classifica::aggiungiPunteggio(int punteggio) {
-    punteggi.push_back(punteggio);
-    salvaPunteggi();
-}
+    //  inizializzo il filename
+    this->filename = fileName;
 
-// Mostra la classifica ordinata in modo decrescente
-void Classifica::mostraClassifica() const {
-    clear();
-    mvprintw(0, 0, "Classifica:");
+    // Apri il file in modalità lettura
+    ifstream file_punteggi(this->filename);
+    
+    //  uso il flusso aperto verso il file in modalità lettura per leggere riga per riga il file
+    //  su ogni riga ci sarà un punteggio (intero) diverso ottenuto in una delle partite passate
+    //  chiuse e salvate
+    int iter;
 
-    if (punteggi.empty()) {
-        mvprintw(2, 0, "Non ci sono punteggi da visualizzare.");
-    } else {
-        std::vector<int> classifica = punteggi;
-        std::sort(classifica.rbegin(), classifica.rend()); // Ordinamento discendente
-
-        for (size_t i = 0; i < classifica.size(); ++i) {
-            mvprintw(2 + i, 0, "%d. %d punti", static_cast<int>(i + 1), classifica[i]);
-        }
+    //  mentre ci sono ancora righe da leggere --> [iter != 0] (le righe vuote sono NULL, e NULL)
+    //  se si arriva alla fine del file (quindi si ha una riga NULL) [file_punteggi >> iter] verrà
+    //  valutata come NULL, e NULL come intero viene considerato 0 (spiegato molto informalmente)
+    while (file_punteggi >> iter) {     
+        
+        //  effettuo un inserimento (ordinato in maniera decrescente) nella lista circolare dei punteggi
+        punteggi = insert_ordered(punteggi, iter);
+       
+       // tengo conto della dimensione della lista dei punteggi
+       ++n_punteggi;
     }
 
-    mvprintw(10, 0, "Premi un tasto per tornare al menu...");
-    getch();
+    //  chiudo il flusso di lettura creato prima
+    file_punteggi.close();
 }
 
-// Carica i punteggi dal file
-void Classifica::caricaPunteggi() {
-    std::ifstream file(nomeFile);
-    if (file.is_open()) {
-        int punteggio;
-        while (file >> punteggio) {
-            punteggi.push_back(punteggio);
+// distruttore
+classifica::~classifica() {}
+
+void classifica::drawClassifica(WINDOW *win){
+	int choice = 0;
+	int start_line = 28;
+
+    WINDOW *header_win = newwin(8, 66 , LINES/2 -25, COLS/2 - 33);
+    WINDOW *inner_win = newwin(30, 20 , LINES/2 -10, COLS/2 - 12);
+
+    wrefresh(inner_win);
+    
+    // Crea la finestra scrollabile
+    keypad(inner_win, TRUE);
+    scrollok(inner_win, TRUE);
+    curs_set(FALSE);
+    list tmp = punteggi;
+    int index = 0;
+    
+    do
+    {   print_menu(inner_win, start_line, tmp, index);
+        drawHeader(header_win);
+        
+        wrefresh(inner_win);
+
+        switch (choice = wgetch(inner_win)) {
+            case KEY_UP:
+                if (start_line > 28) {
+                    --start_line;
+                    tmp = tmp->prev;
+                    --index;
+                }
+                break;
+            case KEY_DOWN:
+                if (start_line < n_punteggi) {
+                    ++start_line;
+                    ++index;
+                    tmp=tmp->next;
+                }
+                break;
+            default:
+                break;
         }
-        file.close();
-    }
+    }while (choice != KEY_LEFT);
 }
 
-// Salva i punteggi nel file
-void Classifica::salvaPunteggi() const {
-    std::ofstream file(nomeFile);
-    if (file.is_open()) {
-        for (int punteggio : punteggi) { 
-            file << punteggio << std::endl;
-        }
-        file.close();
-    }
+void classifica::print_menu(WINDOW *win, int start_line, list to_draw, int index) {
+    int starty = 1;
+    list tmp = to_draw;
+
+    for(int i = index; i < start_line && i < n_punteggi; i++)
+	{	mvwprintw(win, starty, 1, "    %d. %d    ", i+1, tmp->val);
+        ++starty; 
+        tmp = tmp->next;
+	}
+    wrefresh(win);
 }
+
+void classifica::drawHeader(WINDOW *win){
+    mvwprintw(win, 2, 2, "   ____   _                       _    __   _                ");
+    mvwprintw(win, 3, 2, "  / ___| | |   __ _   ___   ___  (_)  / _| (_)   ___    __ _ ");
+    mvwprintw(win, 4, 2, " | |     | |  / _` | / __| / __| | | | |_  | |  / __|  / _` |");
+    mvwprintw(win, 5, 2, " | |___  | | | (_| | \\__ \\ \\__ \\ | | |  _| | | | (__  | (_| |");
+    mvwprintw(win, 6, 2, "  \\____| |_|  \\__,_| |___/ |___/ |_| |_|   |_|  \\___|  \\__,_|");
+    wrefresh(win);
+}
+
+list classifica::getPunteggi(){
+    return punteggi;
+}
+
+void classifica::distruggiPunteggi(){
+    delete_list(this->punteggi);
+}
+
+
+void classifica::salvaPunteggi(){
+    print_reverse(this->punteggi, this->filename);
+}
+
+void classifica::inserisciPunteggio(int p) { 
+    this->punteggi = insert_ordered(this->punteggi, p);
+    this->n_punteggi++;  // Incrementa il contatore
+}
+
+unsigned int classifica::getn_Punteggi(){
+    return n_punteggi;
+}
+
+char *classifica::getFilename(){
+    return filename;
+}
+
+
+
+
