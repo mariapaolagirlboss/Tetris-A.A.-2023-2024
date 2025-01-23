@@ -141,3 +141,4 @@ void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, in
 } 
 // Quando usare questa funzione? Quando si deve spostare un determinato tetramino e si deve svuotare il tutto,
 // oppure quando il calcolo delle possibile mosse (...???) RIGUARDA, UTILE PER AGGIORNARE POSIZIONE DI UN PEZZO IN MOVIMENTO
+

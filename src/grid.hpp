@@ -20,7 +20,7 @@ class Griglia {
      //funzioni riguardanti le collisioni
      bool Collisione_Non_Avvenuta (int x, int y, char tetramino [4][4], int larghezza, int altezza);
      bool Posiziona (int x, int y, char tetramino [4][4], int larghezza, int altezza, char figura);
-     // void Rimozione_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza);
+     // void Rimozione_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza); metodo superfluo
      void Controllo_Er ();
      void Svuota_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza);
      void Elimina_Riga (int r);
