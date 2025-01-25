@@ -30,17 +30,24 @@ void Griglia::Stampa(){
     }
 }
 
-bool Griglia::Verifica_Posizione(int x, int y){
-     if (x>=0 && x<Larghezza && y>=0 && y<Lunghezza&&grid[x][y]==' ') {
-        return true;
-     } else {
-        return false;
-     }
 
-}
 
-void Griglia::Fissa_Cella(int x, int y, char valore){
-    grid[x][y]=valore; // fissa tetramino, riguarda se deve servirsi di verifica posizione
+// eliminazione verifica_posizione, non serviva a nulla
+
+void Griglia::Fissa_In_Cella(int x, int y, char tetramino[4][4], int larghezza, int lunghezza){
+    for (int i_r = 0; i_r<lunghezza; i_r++){
+        for (int i_c = 0; i_c<larghezza; i_c ++){
+            if (tetramino[i_r][i_c] != ' '){
+                int nuovaX = x + i_c;
+                int nuovaY = y + i_r;
+
+                if (nuovaX>=0 && nuovaX < Larghezza && nuovaY >=0 && nuovaY < Lunghezza){
+                    grid[nuovaY][nuovaX] == tetramino[i_r][i_c];
+                }
+            }
+        }
+    }
+    
 }
 
 // Tutto ciò che riguarda le collisioni
@@ -53,12 +60,14 @@ bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int la
                 int nuovaY = y + i_r; // calcolo nuova posizione in base ai dati forniti
 
 
-                if (nuovaX<0 || nuovaX >= Larghezza || nuovaY<0 || nuovaY>=Lunghezza){
+                if (nuovaX<0 || nuovaX >= Larghezza || nuovaY>=Lunghezza){
                     return false; //collisione con i bordi
                 }
 
-                if (grid[nuovaX][nuovaY] != ' '){
+                if (nuovaY >=0 && grid[nuovaX][nuovaY] != ' '){
                     return false; //collisione con un altro pezzo
+
+                    // controlla tetramino sia in Collisione_Non_Avvenuta che in Fissa_In_Cella, potrebbe esserci inversione
                 }
             }
          }
@@ -70,55 +79,39 @@ bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int la
 
 // Sottostante: operazione di eliminare una riga completa, guarda se fa parte collisioni o salvataggio (??buhhh)
 
-void Griglia::Elimina_Riga(int r){
-    for (int i = r; i>0; i--){ // riguardare loop, ma credo sia giusto
-        for (int index = 0; index<Larghezza; index++){
-            grid [i][index]=grid[i-1][index]; //copia riga sopra nella riga corrente, poichè riga corrente è stata eliminata
-
-        }
-    }
-
-    for (int index = 0; index < Larghezza; index++){ // svuota la prima riga (?) RICONTROLLA
-        grid[0][index]= ' ';
-    }
-}
-
-void Griglia::Controllo_Er(){
-
-    for (int i = 0; i<Lunghezza; i++){
+void Griglia::Check_Righe (){
+    for (int index_righe = Lunghezza -1; index_righe >=0; index_righe --){
         bool complete = true;
 
-        for (int index = 0; index <Larghezza; index ++){
-            if (grid[i][index]==' '){
-                complete = false; //ci sono pezzi ancora vuoti, non faccio nulla
+        // primo controllo, vedo se riga è piena oppure no
+        for (int primo = 0; primo<Larghezza; primo ++){
+            if (grid[index_righe][primo]==' '){
+                complete = false;
                 break;
             }
         }
-        if (complete) {
-            Elimina_Riga(i);
-            i--; //devo aggiornare indice, rige sopra spostate verso il basso (RICONTROLLA)
+        if (complete){ // se la linea è invece completa (complete = true), devo effettuare l'eliminazione
+         for (int secondo = index_righe; secondo >0; secondo--){ //sposto verso basso le righe
+            for (int secondo_s = 0; secondo_s <Larghezza; secondo_s ++){
+                grid[secondo][secondo_s]==grid[secondo-1][secondo_s];
+
+            }
+         }
+         for (int j=0; j<Larghezza; j++){
+            grid[0][j] = ' '; // ho svuotato prima riga
+         }
+         index_righe++;
         }
     }
 }
-
 // fine controllo riga completamente piena
 
 bool Griglia::Posiziona(int x, int y, char tetramino[4][4], int larghezza, int lunghezza, char figura){
     if (!Collisione_Non_Avvenuta(x, y, tetramino, larghezza, lunghezza)){// quindi È AVVENUTA una collisione
         return false; //non riesco a posizionarlo perchè c'è qualcosa in mezzo, quindi mi devo fermare
     }
-    for (int indice = 0; indice<lunghezza; indice ++){
-        for (int indice_secondario = 0; indice_secondario<larghezza; indice_secondario ++){
-           if (tetramino[indice][indice_secondario] != ' '){
-             grid[y+indice][x+indice_secondario]=figura; // devo aggiornare in base al tetramino, non mi interessano celle vuote
-             }
-
-
-
-           
-        }
-    }
-    Controllo_Er();
+    Fissa_In_Cella(x,y,tetramino,larghezza,lunghezza);
+    Check_Righe();
     return true; //posizionamento avvenuto con successo
 }
 
