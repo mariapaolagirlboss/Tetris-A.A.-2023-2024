@@ -1,34 +1,7 @@
 #include <ncurses.h>
-#include "grid.h"
-using namespace std;
-
-int main() {
-
-    initscr();              // Inizializza ncurses
-    noecho();               // Non mostrare l'input dell'utente
-    cbreak();               // Disabilita il buffering dell'input
-
-    Grid grid;
-    grid.draw_grid();
-
-    refresh();              // Aggiorna lo schermo
-    getch();                // Aspetta l'input dell'utente
-
-    endwin();               // Termina ncurses
-    return 0;
-}
-
-
-
-
-
-
-
-
-
-#include <ncurses.h>
 #include <cstdlib>
-#include "Classifica.hpp"
+#include "grid.hpp"
+#include "classifica.hpp"
 
 void menu(Classifica& classifica);
 void nuovaPartita(Classifica& classifica);
@@ -42,6 +15,10 @@ int main() {
 
     // Crea un oggetto Classifica che gestisce la classifica nel file "classifica.txt"
     Classifica classifica("classifica.txt");
+    Griglia grid;
+    grid.Inizializza();
+
+    refresh();              // Aggiorna lo schermo
 
     // Avvia il menu principale
     menu(classifica);
