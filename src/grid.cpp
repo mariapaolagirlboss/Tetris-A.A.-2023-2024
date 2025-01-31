@@ -18,6 +18,7 @@ void Griglia::Inizializza(){
             grid[lungh][largh]=' ';//inizialmente avevo posto 0, verifica cosa sia meglio
         }
     }
+    refresh();
 
 }
 
@@ -28,7 +29,7 @@ void Griglia::Stampa(){
 
         }
     }
-}
+} //controlla funzioni stampa
 
 
 
@@ -42,7 +43,7 @@ void Griglia::Fissa_In_Cella(int x, int y, char tetramino[4][4], int larghezza, 
                 int nuovaY = y + i_r;
 
                 if (nuovaX>=0 && nuovaX < Larghezza && nuovaY >=0 && nuovaY < Lunghezza){
-                    grid[nuovaY][nuovaX] == tetramino[i_r][i_c];
+                    grid[nuovaY][nuovaX] = tetramino[i_r][i_c];
                 }
             }
         }
@@ -64,7 +65,7 @@ bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int la
                     return false; //collisione con i bordi
                 }
 
-                if (nuovaY >=0 && grid[nuovaX][nuovaY] != ' '){
+                if (nuovaY >=0 && grid[nuovaY][nuovaX] != ' '){
                     return false; //collisione con un altro pezzo
 
                     // controlla tetramino sia in Collisione_Non_Avvenuta che in Fissa_In_Cella, potrebbe esserci inversione
@@ -93,7 +94,7 @@ void Griglia::Check_Righe (){
         if (complete){ // se la linea è invece completa (complete = true), devo effettuare l'eliminazione
          for (int secondo = index_righe; secondo >0; secondo--){ //sposto verso basso le righe
             for (int secondo_s = 0; secondo_s <Larghezza; secondo_s ++){
-                grid[secondo][secondo_s]==grid[secondo-1][secondo_s];
+                grid[secondo][secondo_s]=grid[secondo-1][secondo_s];
 
             }
          }
@@ -124,7 +125,7 @@ void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, in
                 int posizione_y= y + index;
 
                 if (posizione_x >=0 && posizione_x < Larghezza && posizione_y>=0 && posizione_y < Lunghezza) {
-                    grid[posizione_x][posizione_y] = ' '; // solo se valido svuoto cella, potrebbe andare in segmentation fault
+                    grid[posizione_y][posizione_x] = ' '; // solo se valido svuoto cella, potrebbe andare in segmentation fault
                 }
              }
           

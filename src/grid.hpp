@@ -14,16 +14,14 @@ class Griglia {
      int grid [20][10]; 
      void Inizializza ();
      void Stampa ();
-     bool Verifica_Posizione(int x, int y);
-     void Fissa_Cella(int x, int y, char valore);
+     void Fissa_In_Cella(int x, int y, char tetramino [4][4], int larghezza, int altezza);
 
      //funzioni riguardanti le collisioni
      bool Collisione_Non_Avvenuta (int x, int y, char tetramino [4][4], int larghezza, int altezza);
      bool Posiziona (int x, int y, char tetramino [4][4], int larghezza, int altezza, char figura);
      // void Rimozione_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza); metodo superfluo
-     void Controllo_Er ();
+     void Check_Righe ();
      void Svuota_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza);
-     void Elimina_Riga (int r);
 
 
 
