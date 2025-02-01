@@ -25,7 +25,7 @@ class classifica {
     public:
         //Costruttore
         classifica(){};
-        classifica(char* fileName);
+        classifica(const char* fileName); //modifica 1 errore riga 17
 
         //distruttore
         ~classifica();

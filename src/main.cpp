@@ -14,7 +14,7 @@ int main() {
     curs_set(0);          // Nasconde il cursore
 
     // Crea un oggetto Classifica che gestisce la classifica nel file "classifica.txt"
-    classifica classifica("classifica.txt");
+    classifica classifica("classifica.txt");  // Con 'const char*' funziona, ma...
     Griglia grid;
     grid.Inizializza();
 
