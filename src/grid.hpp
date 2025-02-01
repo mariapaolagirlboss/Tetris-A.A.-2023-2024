@@ -1,21 +1,20 @@
 #pragma once //usato solamente una volta
+#include <ncurses.h>
 #ifndef GRID_H
 #define GRID_H
 
-#include <ncurses.h>
 
 class Griglia {
 
     private: 
      int Lunghezza; // colonne
      int Larghezza; // righe
-     int GrandezzaCella; 
-     int grid [20][10]; 
+     char grid [20][10]; 
      WINDOW* win;
 
     public:
      Griglia();
-     ~Griglia() noexcept;
+     ~Griglia() throw ();
 
      void Inizializza ();
      void Stampa ();
@@ -23,7 +22,7 @@ class Griglia {
 
      //funzioni riguardanti le collisioni
      bool Collisione_Non_Avvenuta (int x, int y, char tetramino [4][4], int larghezza, int altezza);
-     bool Posiziona (int x, int y, char tetramino [4][4], int larghezza, int altezza, char figura);
+     bool Posiziona_T (int x, int y, char tetramino [4][4], int larghezza, int altezza);
      // void Rimozione_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza); metodo superfluo
      void Check_Righe ();
      void Svuota_Celle (int x, int y, char tetramino [4][4], int larghezza, int altezza);

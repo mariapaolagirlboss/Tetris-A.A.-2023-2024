@@ -118,7 +118,7 @@ void Griglia::Check_Righe (){
 }
 // fine controllo riga completamente piena
 
-bool Griglia::Posiziona(int x, int y, char tetramino[4][4], int larghezza, int altezza){
+bool Griglia::Posiziona (int x, int y, char tetramino[4][4], int larghezza, int altezza){
     if (!Collisione_Non_Avvenuta(x, y, tetramino, larghezza, altezza)){// quindi È AVVENUTA una collisione
         return false; //non riesco a posizionarlo perchè c'è qualcosa in mezzo, quindi mi devo fermare
     }
