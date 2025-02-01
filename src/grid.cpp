@@ -8,8 +8,13 @@ using namespace std;
 Griglia::Griglia(){
     Lunghezza = 20;
     Larghezza = 10;
-    GrandezzaCella = 30;
+    // GrandezzaCella = 30;
     win = newwin(22,12,1,1);
+
+    if (win==nullptr){
+        throw runtime_error("Errore nell'apertura della finestra");
+    }
+    
     Inizializza();
     
 }
@@ -85,7 +90,7 @@ bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int la
 // Sottostante: operazione di eliminare una riga completa, guarda se fa parte collisioni o salvataggio (??buhhh)
 
 void Griglia::Check_Righe (){
-    for (int index_righe = Lunghezza -1; index_righe >=0; index_righe --){
+    for (int index_righe = Lunghezza -1; index_righe >=0; ){
         bool complete = true;
 
         // primo controllo, vedo se riga è piena oppure no
@@ -105,13 +110,15 @@ void Griglia::Check_Righe (){
          for (int j=0; j<Larghezza; j++){
             grid[0][j] = ' '; // ho svuotato prima riga
          }
-         index_righe++;
+         
+        } else {
+           index_righe--; //  non decrementare qua, devo controllare anche nuova posizione poichè ora contiene nuova riga
         }
     }
 }
 // fine controllo riga completamente piena
 
-bool Griglia::Posiziona(int x, int y, char tetramino[4][4], int larghezza, int lunghezza, char figura){
+bool Griglia::Posiziona(int x, int y, char tetramino[4][4], int larghezza, int lunghezza){
     if (!Collisione_Non_Avvenuta(x, y, tetramino, larghezza, lunghezza)){// quindi È AVVENUTA una collisione
         return false; //non riesco a posizionarlo perchè c'è qualcosa in mezzo, quindi mi devo fermare
     }
@@ -141,7 +148,7 @@ void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, in
 // oppure quando il calcolo delle possibile mosse (...???) RIGUARDA, UTILE PER AGGIORNARE POSIZIONE DI UN PEZZO IN MOVIMENTO
 
 // distruttore 
-Griglia::~Griglia() {
+Griglia::~Griglia() throw() {
     if (win != nullptr) {
         delwin(win);  
     }
