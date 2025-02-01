@@ -9,26 +9,30 @@ Griglia::Griglia(){
     Lunghezza = 20;
     Larghezza = 10;
     GrandezzaCella = 30;
+    win = newwin(22,12,1,1);
     Inizializza();
+    
 }
 
 void Griglia::Inizializza(){
+ box(win,0,0);
     for (int lungh = 0; lungh<Lunghezza; lungh ++){
         for (int largh= 0; largh<Larghezza; largh++){
             grid[lungh][largh]=' ';//inizialmente avevo posto 0, verifica cosa sia meglio
         }
     }
-    refresh();
+    wrefresh(win);
 
 }
 
 void Griglia::Stampa(){
     for (int lungh=0; lungh<Lunghezza; lungh++){
         for(int largh = 0; largh<Larghezza; largh++){
-            mvaddch(lungh, largh, grid[lungh][largh]);
+            mvwaddch (win, lungh+1, largh+1, grid[lungh][largh]);
 
         }
     }
+    wrefresh(win);
 } //controlla funzioni stampa
 
 
@@ -136,3 +140,9 @@ void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, in
 // Quando usare questa funzione? Quando si deve spostare un determinato tetramino e si deve svuotare il tutto,
 // oppure quando il calcolo delle possibile mosse (...???) RIGUARDA, UTILE PER AGGIORNARE POSIZIONE DI UN PEZZO IN MOVIMENTO
 
+// distruttore 
+Griglia::~Griglia() {
+    if (win != nullptr) {
+        delwin(win);  
+    }
+}

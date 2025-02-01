@@ -2,16 +2,21 @@
 #ifndef GRID_H
 #define GRID_H
 
+#include <ncurses.h>
+
 class Griglia {
 
     private: 
      int Lunghezza; // colonne
      int Larghezza; // righe
      int GrandezzaCella; 
+     int grid [20][10]; 
+     WINDOW* win;
 
     public:
      Griglia();
-     int grid [20][10]; 
+     ~Griglia() noexcept;
+
      void Inizializza ();
      void Stampa ();
      void Fissa_In_Cella(int x, int y, char tetramino [4][4], int larghezza, int altezza);
