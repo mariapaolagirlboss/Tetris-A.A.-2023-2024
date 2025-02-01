@@ -2,8 +2,9 @@
 #define HEADER_SIZE_X 25
 
 //  costruttore
-classifica::classifica(char *fileName)
+classifica::classifica(const char *fileName)
 {
+    /*
     //  inizializzo attributi
     this->punteggi = new node;
     this->n_punteggi = 0;
@@ -33,10 +34,27 @@ classifica::classifica(char *fileName)
 
     //  chiudo il flusso di lettura creato prima
     file_punteggi.close();
+    */
+this->filename = new char[strlen(fileName) + 1];  // correzione riga 17 nel main
+    strcpy(this->filename, fileName);                 
+    this->punteggi = new node;
+    this->n_punteggi = 0;
+
+    std::ifstream file_punteggi(this->filename);
+    int iter;
+    while (file_punteggi >> iter) {
+        punteggi = insert_ordered(punteggi, iter);
+        ++n_punteggi;
+    }
+    file_punteggi.close();
 }
 
 // distruttore
-classifica::~classifica() {}
+/* classifica::~classifica() {} */
+classifica::~classifica (){
+    delete[] filename;     // Deallocazione della memoria allocata
+    delete_list(punteggi); 
+}
 
 void classifica::drawClassifica(WINDOW *win){
 	int choice = 0;
