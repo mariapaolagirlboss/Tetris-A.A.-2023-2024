@@ -14,7 +14,7 @@ Griglia::Griglia(){
     if (win==nullptr){
         throw runtime_error("Errore nell'apertura della finestra");
     }
-    
+
     Inizializza();
     
 }
@@ -44,8 +44,8 @@ void Griglia::Stampa(){
 
 // eliminazione verifica_posizione, non serviva a nulla
 
-void Griglia::Fissa_In_Cella(int x, int y, char tetramino[4][4], int larghezza, int lunghezza){
-    for (int i_r = 0; i_r<lunghezza; i_r++){
+void Griglia::Fissa_In_Cella(int x, int y, char tetramino[4][4], int larghezza, int altezza){
+    for (int i_r = 0; i_r<altezza; i_r++){
         for (int i_c = 0; i_c<larghezza; i_c ++){
             if (tetramino[i_r][i_c] != ' '){
                 int nuovaX = x + i_c;
@@ -62,8 +62,8 @@ void Griglia::Fissa_In_Cella(int x, int y, char tetramino[4][4], int larghezza, 
 
 // Tutto ciò che riguarda le collisioni
 
-bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int larghezza, int lunghezza){
-    for (int i_r = 0; i_r<lunghezza; i_r++){ // i_r = indice della riga del tetramino
+bool Griglia::Collisione_Non_Avvenuta(int x, int y, char tetramino[4][4], int larghezza, int altezza){
+    for (int i_r = 0; i_r<altezza; i_r++){ // i_r = indice della riga del tetramino
          for (int i_c = 0; i_c<larghezza; i_c++){ // i_c = indice della colonna del tetramino
             if (tetramino[i_r][i_c] != ' ') {
                 int nuovaX = x + i_c;
@@ -118,18 +118,18 @@ void Griglia::Check_Righe (){
 }
 // fine controllo riga completamente piena
 
-bool Griglia::Posiziona(int x, int y, char tetramino[4][4], int larghezza, int lunghezza){
-    if (!Collisione_Non_Avvenuta(x, y, tetramino, larghezza, lunghezza)){// quindi È AVVENUTA una collisione
+bool Griglia::Posiziona(int x, int y, char tetramino[4][4], int larghezza, int altezza){
+    if (!Collisione_Non_Avvenuta(x, y, tetramino, larghezza, altezza)){// quindi È AVVENUTA una collisione
         return false; //non riesco a posizionarlo perchè c'è qualcosa in mezzo, quindi mi devo fermare
     }
-    Fissa_In_Cella(x,y,tetramino,larghezza,lunghezza);
+    Fissa_In_Cella(x,y,tetramino,larghezza,altezza);
     Check_Righe();
     return true; //posizionamento avvenuto con successo
 }
 
-void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, int lunghezza){
+void Griglia::Svuota_Celle(int x, int y, char tetramino[4][4], int larghezza, int altezza){
 
-    for (int index = 0; index<lunghezza; index++){
+    for (int index = 0; index<altezza; index++){
         for (int index_s = 0; index_s<larghezza; index_s++){// stesso procedimento di prima
              if(tetramino[index][index_s]!= ' '){
                 int posizione_x= x + index_s;
