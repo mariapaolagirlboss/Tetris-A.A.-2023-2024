@@ -1,7 +1,7 @@
 #include <fstream>
 #include <ncurses.h>
 
-#include "./my_list.hpp"
+#include "my_list.hpp"
 
 #define MENU_SIZE_Y n_punteggi + 2
 #define MENU_SIZE_X 20

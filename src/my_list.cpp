@@ -1,4 +1,4 @@
-#include "../include/my_list.hpp"
+#include "my_list.hpp"
 
 
 list head_insert(list l, int el){

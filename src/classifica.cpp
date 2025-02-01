@@ -1,4 +1,4 @@
-#include "../include/classifica.hpp"
+#include "classifica.hpp"
 #define HEADER_SIZE_X 25
 
 //  costruttore
